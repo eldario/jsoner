@@ -86,3 +86,14 @@ $ go run main.go -path=sample.csv -sample=sample.json --compact --show
 [{"IDE":"1","Person":{"Contacts":{"EMAIL":"ivan@gmail.com","Phone":"+4464564641","address":"5 avenue"},"Name":"Ivan"}},{"IDE":"2","Person":{"Contacts":{"EMAIL":"b.irina@gmail.com","Phone":"+889789464","address":"21 avenue"},"Name":"Irina"}}]
 
 ```
+
+### Available formatters
+
+
+| Formatter                       | Description                                                                                                        |
+|---------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| `$field_name`                   | `field_name` - field name from your csv                                                                            |
+| `$splitOrNull(field_name,0,4)`  | Splits value from column `field_name` and gets a part from `0` to `4` position. If value is empty - returns `null` |
+| `$stringOrEmpty(field_name)`    | Gets current value from `field_name`. If value is empty - returns empty string "", not `null`                      |
+| `$int(field_name)`              | Make a given value from `field_name` a type of `Integer`                                                           |
+| `$date(field_name,"d/m/y","2")` | Create a `DateTime` value from given value in `field_name` with format using `d m y h i s`. The last parameter is responsible for the deviation from the date. Can be either positive or negative  |
