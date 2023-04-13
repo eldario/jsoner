@@ -7,8 +7,8 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"jsoner/pkg/formats"
 	"os"
-	"strings"
 )
 
 func main() {
@@ -44,11 +44,13 @@ func parse(path string, jsonSample string, isCompact bool) (string, error) {
 	}
 
 	reader := csv.NewReader(csvFile)
+	reader.Comma = ';'
 	template := readTemplateJson(jsonSample)
 
 	entries, err := proceed(reader, template)
 
 	result, err := json.MarshalIndent(entries, "", " ")
+
 	if err != nil {
 		return "", fmt.Errorf("Marshal error %s\n", err)
 	}
@@ -94,11 +96,7 @@ func proceed(reader *csv.Reader, sample string) ([]map[string]interface{}, error
 			continue
 		}
 
-		newTemplate := sample
-		for i, value := range row {
-			attribute := attributes[i]
-			newTemplate = strings.Replace(newTemplate, "$"+attribute, ""+value+"", 1)
-		}
+		newTemplate := formats.FindAllReplaces(sample, attributes, row)
 
 		myStoredVariable := map[string]interface{}{}
 		err = json.Unmarshal([]byte(newTemplate), &myStoredVariable)
